@@ -153,6 +153,7 @@ $(document).ready(function () {
     function processContributoVenditore(tortaData) {
         var venditeArray = [];
         var finalObject = {};
+        var totalSales = 0;
 
         for (var i = 0; i < tortaData.length; i++) {
             //console.log(data[i]);
@@ -176,6 +177,17 @@ $(document).ready(function () {
             // console.log(oggettoIntermedio);
             oggettoIntermedio[salesMan] += oggettoSingolo.amount;     // (oramai la chiave esiste) e al suo valore sommiamo quello dell'amount dell'iesimo oggetto singolo che stiamo ciclando
         }
+        console.log(oggettoIntermedio);
+
+        for (var amount in oggettoIntermedio) {
+            totalSales += oggettoIntermedio[amount];
+        }
+
+        for (var amount in oggettoIntermedio) {
+            oggettoIntermedio[amount] = ((oggettoIntermedio[amount] / totalSales) * 100).toFixed(2);
+        }
+
+        console.log(totalSales);
         console.log(oggettoIntermedio);
 
         var labelsTorta = [];
@@ -244,6 +256,7 @@ $(document).ready(function () {
                 datasets: [{
                     backgroundColor: ['blue','green','red','yellow'],
                     borderColor: 'none',
+                    borderWidth: 0,
                     data: tortaData.allData,
                 }],
 
