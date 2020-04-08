@@ -12,8 +12,10 @@ $(document).ready(function () {
 
             var dataCopy = data;
             var salesObject = processSalesPerMonth(dataCopy);
-            console.log(salesObject);
+            //console.log(salesObject);
             createLineChart(salesObject);
+            var venditeData = processContributoVenditore(dataCopy);
+            createTorta(venditeData);
 
 
 
@@ -129,7 +131,7 @@ $(document).ready(function () {
             // console.log(oggettoIntermedio);
             oggettoIntermedio[mese] += oggettoSingolo.amount;     // (oramai la chiave esiste) e al suo valore sommiamo quello dell'amount dell'iesimo oggetto singolo che stiamo ciclando
         }
-        console.log(oggettoIntermedio);
+        //console.log(oggettoIntermedio);
 
         var labelsLine = [];
         var dataLine = [];
@@ -155,51 +157,47 @@ $(document).ready(function () {
         for (var i = 0; i < tortaData.length; i++) {
             //console.log(data[i]);
             var vendite = {
-                salesman: salesData[i].salesman,
-                amount: salesData[i].amount
+                salesman: tortaData[i].salesman,
+                amount: tortaData[i].amount
             }
             //console.log(salesData);
-            venditeArray.push(salesEntry);
+            venditeArray.push(vendite);
         }
-
-        salesArray.sort(function(a,b) {
-            return a.month - b.month
-        })
 
         var oggettoIntermedio = {};     // creo un oggetto vuoto dove inseriremo i valori dei 'json.type' come chiavi e come valori le somme degli 'amount'
 
-        for (var i = 0; i < salesArray.length; i++) {
-            var oggettoSingolo = salesArray[i];
-            var currDate = moment(oggettoSingolo.date, 'DD-MM-YYYY').locale('it');
+        for (var i = 0; i < venditeArray.length; i++) {
+            var oggettoSingolo = venditeArray[i];
+            var salesMan = oggettoSingolo.salesman;
 
-            var mese = currDate.format('MMMM');
-            if (oggettoIntermedio[mese] === undefined) {      // nel caso in cui la chiave non esiste
-                oggettoIntermedio[mese] = 0;                  //  allora la creiamo e gli assegnamo il valore 0
+            if (oggettoIntermedio[salesMan] === undefined) {      // nel caso in cui la chiave non esiste
+                oggettoIntermedio[salesMan] = 0;                  //  allora la creiamo e gli assegnamo il valore 0
             }
             // console.log(oggettoIntermedio);
-            oggettoIntermedio[mese] += oggettoSingolo.amount;     // (oramai la chiave esiste) e al suo valore sommiamo quello dell'amount dell'iesimo oggetto singolo che stiamo ciclando
+            oggettoIntermedio[salesMan] += oggettoSingolo.amount;     // (oramai la chiave esiste) e al suo valore sommiamo quello dell'amount dell'iesimo oggetto singolo che stiamo ciclando
         }
         console.log(oggettoIntermedio);
 
-        var labelsLine = [];
-        var dataLine = [];
+        var labelsTorta = [];
+        var dataTorta = [];
 
         for (var key in oggettoIntermedio) {    // ciclo nell'oggettoIntermedio per prendermi le chiavi e trasformarle in 'labels' e i valori (di quella chiave) per trasformarli in 'data'
             // console.log(key);
-            labelsLine.push(key);
-            dataLine.push(oggettoIntermedio[key]);
+            labelsTorta.push(key);
+            dataTorta.push(oggettoIntermedio[key]);
         }
 
-        finalObject.labels = labelsLine;
-        finalObject.allData = dataLine;
+        finalObject.labels = labelsTorta;
+        finalObject.allData = dataTorta;
 
-        //console.log(finalObject);
+        console.log(finalObject);
 
         return finalObject;
+
     }
 
     function createLineChart(chartData) {
-        var ctx = $('#grafico');
+        var ctx = $('#linechart');
         var chart = new Chart(ctx, {
 
             type: 'line',
@@ -234,6 +232,24 @@ $(document).ready(function () {
             }
         });
 
+    }
+
+    function createTorta(tortaData) {
+        var ctx = $('#torta');
+        var chart = new Chart(ctx, {
+
+            type: 'pie',
+            data: {
+                labels: tortaData.labels,
+                datasets: [{
+                    backgroundColor: ['blue','green','red','yellow'],
+                    borderColor: 'none',
+                    data: tortaData.allData,
+                }],
+
+
+            }
+        });
     }
 
 
