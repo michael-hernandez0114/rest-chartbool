@@ -148,6 +148,56 @@ $(document).ready(function () {
         return finalObject;
     }
 
+    function processContributoVenditore(tortaData) {
+        var venditeArray = [];
+        var finalObject = {};
+
+        for (var i = 0; i < tortaData.length; i++) {
+            //console.log(data[i]);
+            var vendite = {
+                salesman: salesData[i].salesman,
+                amount: salesData[i].amount
+            }
+            //console.log(salesData);
+            venditeArray.push(salesEntry);
+        }
+
+        salesArray.sort(function(a,b) {
+            return a.month - b.month
+        })
+
+        var oggettoIntermedio = {};     // creo un oggetto vuoto dove inseriremo i valori dei 'json.type' come chiavi e come valori le somme degli 'amount'
+
+        for (var i = 0; i < salesArray.length; i++) {
+            var oggettoSingolo = salesArray[i];
+            var currDate = moment(oggettoSingolo.date, 'DD-MM-YYYY').locale('it');
+
+            var mese = currDate.format('MMMM');
+            if (oggettoIntermedio[mese] === undefined) {      // nel caso in cui la chiave non esiste
+                oggettoIntermedio[mese] = 0;                  //  allora la creiamo e gli assegnamo il valore 0
+            }
+            // console.log(oggettoIntermedio);
+            oggettoIntermedio[mese] += oggettoSingolo.amount;     // (oramai la chiave esiste) e al suo valore sommiamo quello dell'amount dell'iesimo oggetto singolo che stiamo ciclando
+        }
+        console.log(oggettoIntermedio);
+
+        var labelsLine = [];
+        var dataLine = [];
+
+        for (var key in oggettoIntermedio) {    // ciclo nell'oggettoIntermedio per prendermi le chiavi e trasformarle in 'labels' e i valori (di quella chiave) per trasformarli in 'data'
+            // console.log(key);
+            labelsLine.push(key);
+            dataLine.push(oggettoIntermedio[key]);
+        }
+
+        finalObject.labels = labelsLine;
+        finalObject.allData = dataLine;
+
+        //console.log(finalObject);
+
+        return finalObject;
+    }
+
     function createLineChart(chartData) {
         var ctx = $('#grafico');
         var chart = new Chart(ctx, {
