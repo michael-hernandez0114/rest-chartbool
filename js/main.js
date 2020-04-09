@@ -30,11 +30,29 @@ $(document).ready(function () {
     $('#btn-submit').on('click', function(){
         var venditoreSelezionato = $('#venditore').val();
         var dateSelected = $('#sales-date').val();
-        var formattedDate = moment(dateSelected).format('DD/MM/YYYY');
+        var formattedDate = moment(dateSelected, 'YYYY-MM-DD').format('DD/MM/YYYY');
+        var salesAmount = $('#sales').val();
+
+        $.ajax({
+            url: apiBaseURL,
+            method: 'POST',
+            data: {
+                salesman: venditoreSelezionato,
+                date: dateSelected,
+                sales: salesAmount
+            },
+            success: function(data, stato) {
+
+            },
+            error: function(error){
+                alert('the PUSH API has errored:' + error)
+            }
+        })
 
         console.log(venditoreSelezionato);
         console.log(dateSelected);
         console.log(formattedDate);
+        console.log(salesAmount);
 
     });
 
@@ -151,9 +169,7 @@ $(document).ready(function () {
 
     function pushSalesData(newData){
 
-        $.ajax({
 
-        })
     }
 
     function createLineChart(chartData) {
