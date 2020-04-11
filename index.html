@@ -15,33 +15,47 @@
   </head>
   <body>
 
-    <div class="container">
-        <h2>Fatturato Mensile</h2>
-        <canvas id="linechart"></canvas>
-    </div>
-    <div class="container">
-        <h2>Vendite per Venditore</h2>
-        <canvas id="torta"></canvas>
-    </div>
-    <div class="container">
-        <h2>Enter Sales Value</h2>
-        <label for="cars">Choose a salesman:</label>
+      <div id="new-sales" class="container">
+          <h2>Enter New Sales Transaction</h2>
+          <div class="new-sales-section">
+              <label for="cars">Choose a salesman:</label>
+              <select id="venditore">
+                <option value="Marco">Marco</option>
+                <option value="Giuseppe">Giuseppe</option>
+                <option value="Riccardo">Riccardo</option>
+                <option value="Roberto">Roberto</option>
+              </select>
+          </div>
+          <div class="new-sales-section">
+                <label for="birthday">Sales Date:</label>
+                <input type="date" id="sales-date" name="sales-date" min="2017-01-01" max="2017-12-31">
+          </div>
+          <div class="new-sales-section">
+              <label>Sales Amount:</label>
+              <input type="number" id="sales">
+          </div>
+          <div class="btn new-sales-section">
+              <button id='btn-submit'>Submit</button>
+          </div>
+      </div>
 
-    <select id="venditore">
-      <option value="Marco">Marco</option>
-      <option value="Giuseppe">Giuseppe</option>
-      <option value="Riccardo">Riccardo</option>
-      <option value="Roberto">Roberto</option>
-    </select>
-    <form >
-      <label for="birthday">Sales Date:</label>
-      <input type="date" id="sales-date" name="sales-date" min="2017-01-01" max="2017-12-31">
-      <label>Sales Amount:</label>
-      <input type="number" id="sales">
+        <div id="chart-container" class="">
+            <div class="container">
+                <h2>Fatturato Mensile</h2>
+                <canvas id="linechart"></canvas>
+            </div>
+            <div class="container">
+                <h2>Vendite per Venditore</h2>
+                <canvas id="torta"></canvas>
+            </div>
+            <div class="container">
+                <h2>Vendite per Quarter</h2>
+                <canvas id="bar"></canvas>
+            </div>
+        </div>
 
-    </form>
-    <button id='btn-submit'>Submit</button>
-    </div>
+
+
 
     <script src="js/main.js"></script>
   </body>
