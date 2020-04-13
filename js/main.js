@@ -72,21 +72,24 @@ $(document).ready(function () {
     }
 
     function populateVenditore(apiData) {
-        var venditoreArray = {};
+        var venditoreArray = [];
 
         for (var i = 0; i < apiData.length; i++) {
 
             if(!venditoreArray.includes(apiData[i].salesman)) {
                 venditoreArray.push(apiData[i].salesman);
+
+                var venditore = {
+                    venditoreValue: apiData[i].salesman,
+                    venditore: apiData[i].salesman
+                }
+
+                var templateFinale = templateOption(venditore);
+                $('#venditore').append(templateFinale);
             }
 
-            console.log(venditoreArray);
         }
 
-        for (var i = 0; i < venditoreArray.length; i++) {
-
-            var templateFinale = templateOption()
-        }
     }
 
     function processSalesPerMonth(salesArray){
