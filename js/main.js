@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
     var apiBaseURL = 'http://157.230.17.132:4012/sales';
+    var htmlOption = $('#select-template').html();
+    var templateOption = Handlebars.compile(htmlOption);
 
     drawCharts();
 
@@ -17,10 +19,34 @@ $(document).ready(function () {
 
     });
 
+    function collectAPIData(input) {
+        var dataArray = [];
+
+        for (var i = 0; i < input.length; i++) {
+            //console.log(data[i]);
+            var salesEntry = {
+                salesman: input[i].salesman,
+                amount: parseInt(input[i].amount),
+                date: input[i].date,
+                month: moment(input[i].date, 'DD-MM-YYYY').locale('it').format('M')
+            }
+            //console.log(salesData);
+            //console.log(input[i].amount);
+            dataArray.push(salesEntry);
+        }
+
+        dataArray.sort(function(a,b) {
+            return a.month - b.month
+        })
+
+        return dataArray;
+    }
+
     function drawCharts() {
 
         $('#linechart').empty();
         $('#torta').empty();
+        $('#bar').empty();
 
             $.ajax({
                 url: apiBaseURL,
@@ -31,6 +57,7 @@ $(document).ready(function () {
 
                     var dataCopy = data;
                     var salesArrayObjs = collectAPIData(dataCopy);
+                    populateVenditore(salesArrayObjs);
                     var salesObject = processSalesPerMonth(salesArrayObjs);
                     //console.log(salesObject);
                     createLineChart(salesObject);
@@ -42,6 +69,24 @@ $(document).ready(function () {
                 }
 
             })
+    }
+
+    function populateVenditore(apiData) {
+        var venditoreArray = {};
+
+        for (var i = 0; i < apiData.length; i++) {
+
+            if(!venditoreArray.includes(apiData[i].salesman)) {
+                venditoreArray.push(apiData[i].salesman);
+            }
+
+            console.log(venditoreArray);
+        }
+
+        for (var i = 0; i < venditoreArray.length; i++) {
+
+            var templateFinale = templateOption()
+        }
     }
 
     function processSalesPerMonth(salesArray){
@@ -76,29 +121,6 @@ $(document).ready(function () {
         //console.log(finalObject);
 
         return finalObject;
-    }
-
-    function collectAPIData(input) {
-        var dataArray = [];
-
-        for (var i = 0; i < input.length; i++) {
-            //console.log(data[i]);
-            var salesEntry = {
-                salesman: input[i].salesman,
-                amount: parseInt(input[i].amount),
-                date: input[i].date,
-                month: moment(input[i].date, 'DD-MM-YYYY').locale('it').format('M')
-            }
-            //console.log(salesData);
-            //console.log(input[i].amount);
-            dataArray.push(salesEntry);
-        }
-
-        dataArray.sort(function(a,b) {
-            return a.month - b.month
-        })
-
-        return dataArray;
     }
 
     function processContributoVenditore(apiData) {
