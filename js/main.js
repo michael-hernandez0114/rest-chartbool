@@ -1,9 +1,13 @@
 $(document).ready(function () {
 
+    const regExp = '^[0-9]+$';
     var apiBaseURL = 'http://157.230.17.132:4012/sales';
+    var minDate = '2017-01-01';
+    var maxDate = '2017-12-31';
     var htmlOption = $('#select-template').html();
     var templateOption = Handlebars.compile(htmlOption);
 
+    setDateRange(minDate, maxDate);
     drawCharts();
 
     $('#btn-submit').on('click', function(){
@@ -13,11 +17,18 @@ $(document).ready(function () {
             date: moment(dateSelected, 'YYYY-MM-DD').format('DD/MM/YYYY'),
             amount:parseInt($('#sales').val())
         };
+        $('#sales-date').val('');
+        $('#sales').val('');
 
         pushSalesData(newSalesEntry);
         drawCharts();
 
     });
+
+    function setDateRange(min, max) {
+        $('#sales-date').attr('min', min);
+        $('#sales-date').attr('max', max);
+    }
 
     function collectAPIData(input) {
         var dataArray = [];
@@ -47,6 +58,7 @@ $(document).ready(function () {
         $('#linechart').empty();
         $('#torta').empty();
         $('#bar').empty();
+        $('#venditore').empty();
 
             $.ajax({
                 url: apiBaseURL,
@@ -181,7 +193,7 @@ $(document).ready(function () {
 
         for (var i = 0; i < apiData.length; i++) {
             var oggettoSingolo = apiData[i];
-            var currQuarter = moment(oggettoSingolo.date, 'DD-MM-YYYY').quarter();
+            var currQuarter = 'Q' + moment(oggettoSingolo.date, 'DD-MM-YYYY').quarter();
 
             console.log(currQuarter);
 
@@ -191,7 +203,7 @@ $(document).ready(function () {
             // console.log(oggettoIntermedio);
             oggettoIntermedio[currQuarter] += oggettoSingolo.amount;
         }
-        console.log(oggettoIntermedio);
+        //console.log(oggettoIntermedio);
 
         var labelsLine = [];
         var dataLine = [];
@@ -300,6 +312,7 @@ $(document).ready(function () {
                     borderColor: 'none',
                     borderWidth: 0,
                     data: barChartData.allData,
+                    label: '2017'
                 }],
 
 

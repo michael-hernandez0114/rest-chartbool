@@ -18,14 +18,14 @@
       <div id="new-sales" class="container">
           <h2>Enter New Sales Transaction</h2>
           <div class="new-sales-section">
-              <label for="cars">Choose a salesman:</label>
+              <label>Choose a salesman:</label>
               <select id="venditore">
 
               </select>
           </div>
           <div class="new-sales-section">
-                <label for="birthday">Sales Date:</label>
-                <input type="date" id="sales-date" name="sales-date" min="2017-01-01" max="2017-12-31">
+                <label>Sales Date:</label>
+                <input type="date" id="sales-date" name="sales-date">
           </div>
           <div class="new-sales-section">
               <label>Sales Amount:</label>
@@ -37,15 +37,15 @@
       </div>
 
         <div id="chart-container" class="">
-            <div class="container">
+            <div class="container chart">
                 <h2>Fatturato Mensile</h2>
                 <canvas id="linechart"></canvas>
             </div>
-            <div class="container">
+            <div class="container chart">
                 <h2>Vendite per Venditore</h2>
                 <canvas id="torta"></canvas>
             </div>
-            <div class="container">
+            <div class="container chart">
                 <h2>Vendite per Quarter</h2>
                 <canvas id="bar"></canvas>
             </div>
@@ -53,7 +53,7 @@
 
     <script id='select-template' type="text/x-handlebars-template">
 
-        <option value="{{venditore-value}}">{{venditore}}</option>
+        <option value="{{venditoreValue}}">{{venditore}}</option>
 
     </script>
 
